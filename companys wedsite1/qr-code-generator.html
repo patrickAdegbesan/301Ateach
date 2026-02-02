@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator - 301A TECH LTD</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .qr-container {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 30px;
+      border: 2px solid #e2e8f0;
+    }
+
+    #qrcode {
+      display: inline-block;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #qrcode canvas,
+    #qrcode img {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .url-display {
+      text-align: center;
+      margin-top: 15px;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #3b82f6;
+      font-weight: 600;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 14px 24px;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: white;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #0f172a;
+      border: 2px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .info-box h3 {
+      color: #1e40af;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-left: 20px;
+    }
+
+    .info-box li {
+      margin-bottom: 5px;
+    }
+
+    .size-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .size-btn {
+      padding: 12px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .size-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+
+    .size-btn:hover {
+      border-color: #3b82f6;
+    }
+
+    .label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 640px) {
+      .buttons {
+        grid-template-columns: 1fr;
+      }
+      
+      .size-options {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+
+    .success-message {
+      background: #10b981;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin-top: 15px;
+      display: none;
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔗 QR Code Generator</h1>
+    <p class="subtitle">301A TECH LTD Website QR Code</p>
+
+    <div class="label">Select QR Code Size:</div>
+    <div class="size-options">
+      <button class="size-btn" onclick="generateQR(256)">Small<br>(256px)</button>
+      <button class="size-btn active" onclick="generateQR(512)">Medium<br>(512px)</button>
+      <button class="size-btn" onclick="generateQR(1024)">Large<br>(1024px)</button>
+    </div>
+
+    <div class="qr-container">
+      <div id="qrcode"></div>
+      <div class="url-display">https://301atech.com</div>
+    </div>
+
+    <div class="buttons">
+      <button class="btn-primary" onclick="downloadQR()">
+        ⬇️ Download PNG
+      </button>
+      <button class="btn-secondary" onclick="copyURL()">
+        📋 Copy URL
+      </button>
+    </div>
+
+    <div id="successMessage" class="success-message"></div>
+
+    <div class="info-box">
+      <h3>📌 How to Use:</h3>
+      <ul>
+        <li><strong>Business Cards:</strong> Download Large (1024px) for best print quality</li>
+        <li><strong>Flyers/Posters:</strong> Use Large size for professional printing</li>
+        <li><strong>Digital Use:</strong> Medium size works perfectly</li>
+        <li><strong>Recommended:</strong> Test scan the QR code before printing</li>
+        <li><strong>Print Tip:</strong> Ensure at least 0.5 inch white space around QR code</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>🎯 Where to Add:</h3>
+      <ul>
+        <li>Back of business cards</li>
+        <li>Marketing flyers and brochures</li>
+        <li>Office posters and signage</li>
+        <li>Product packaging</li>
+        <li>Email signatures</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs2@0.0.2/qrcode.min.js"></script>
+  <script>
+    let currentSize = 512;
+    let qrCodeInstance = null;
+
+    // Generate QR code on page load
+    window.addEventListener('load', function() {
+      setTimeout(() => generateQR(512), 100);
+    });
+
+    function generateQR(size) {
+      currentSize = size;
+      
+      // Update button states
+      document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Find and activate the clicked button
+      const buttons = document.querySelectorAll('.size-btn');
+      buttons.forEach((btn, index) => {
+        if ((size === 256 && index === 0) || (size === 512 && index === 1) || (size === 1024 && index === 2)) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Clear previous QR code
+      document.getElementById('qrcode').innerHTML = '';
+
+      // Generate new QR code using QRCode.js
+      try {
+        new QRCode(document.getElementById('qrcode'), {
+          text: 'https://301atech.com',
+          width: size,
+          height: size,
+          colorDark: '#0f172a',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.H
+        });
+        
+        showMessage('✅ QR Code generated!');
+      } catch (error) {
+        console.error('QR Code generation error:', error);
+        showMessage('❌ Failed to generate QR code', 'error');
+      }
+    }
+
+    function downloadQR() {
+      const qrImg = document.querySelector('#qrcode img');
+      const qrCanvas = document.querySelector('#qrcode canvas');
+      
+      if (!qrImg && !qrCanvas) {
+        showMessage('❌ Please wait for QR code to generate', 'error');
+        return;
+      }
+
+      if (qrImg) {
+        // Download from img tag
+        const link = document.createElement('a');
+        link.download = `301atech-qr-code-${currentSize}px.png`;
+        link.href = qrImg.src;
+        link.click();
+        showMessage('✅ QR Code downloaded successfully!');
+      } else if (qrCanvas) {
+        // Download from canvas
+        qrCanvas.toBlob(function(blob) {
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.download = `301atech-qr-code-${currentSize}px.png`;
+          link.href = url;
+          link.click();
+          URL.revokeObjectURL(url);
+          showMessage('✅ QR Code downloaded successfully!');
+        });
+      }
+    }
+
+    function copyURL() {
+      navigator.clipboard.writeText('https://301atech.com').then(function() {
+        showMessage('✅ URL copied to clipboard!');
+      }, function() {
+        showMessage('❌ Failed to copy URL', 'error');
+      });
+    }
+
+    function showMessage(text, type = 'success') {
+      const messageEl = document.getElementById('successMessage');
+      messageEl.textContent = text;
+      messageEl.style.background = type === 'success' ? '#10b981' : '#ef4444';
+      messageEl.classList.add('show');
+      
+      setTimeout(() => {
+        messageEl.classList.remove('show');
+      }, 3000);
+    }
+
+    // Generate different sizes
+    function generateAllSizes() {
+      const sizes = [256, 512, 1024];
+      sizes.forEach(size => {
+        setTimeout(() => {
+          generateQR(size);
+          setTimeout(() => downloadQR(), 100);
+        }, size);
+      });
+    }
+  </script>
+</body>
+</html>

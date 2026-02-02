@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Job {
+  id             String   @id @default(cuid())
+  slug           String   @unique
+  title          String
+  location       String
+  workType       WorkType
+  employmentType EmploymentType
+  department     String
+  summary        String   @db.Text
+  description    String   @db.Text
+  responsibilities String[]
+  mustHave       String[]
+  niceToHave     String[]
+  benefits       String[]
+  salaryRange    String
+  postedDate     String
+  featured       Boolean  @default(false)
+  active         Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  applications   Application[]
+
+  @@map("jobs")
+}
+
+model Application {
+  id          String            @id @default(cuid())
+  jobId       String
+  firstName   String
+  lastName    String
+  email       String
+  phone       String?
+  coverLetter String?           @db.Text
+  cvData      Bytes
+  cvMimeType  String
+  status      ApplicationStatus @default(PENDING)
+  boosted     Boolean           @default(false)
+  boostExpiry DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  
+  job         Job               @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("applications")
+}
+
+enum WorkType {
+  Remote
+  On_site
+  Hybrid
+}
+
+enum EmploymentType {
+  Full_time
+  Part_time
+  Contract
+  Internship
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWING
+  SHORTLISTED
+  INTERVIEWED
+  REJECTED
+  ACCEPTED
+}
+
+model LinkedInCredentials {
+  id             String   @id @default(cuid())
+  accessToken    String   @db.Text
+  refreshToken   String?  @db.Text
+  expiresAt      DateTime
+  organizationId String?
+  personUrn      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("linkedin_credentials")
+}

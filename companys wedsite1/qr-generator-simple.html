@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Generator - 301A TECH LTD</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #64748b;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .qr-container {
+      background: #f8fafc;
+      border-radius: 16px;
+      padding: 30px;
+      text-align: center;
+      margin-bottom: 30px;
+      border: 2px solid #e2e8f0;
+    }
+
+    #qrcode {
+      display: inline-block;
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    #qrcode img {
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .url-display {
+      text-align: center;
+      margin-top: 15px;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 14px;
+      color: #3b82f6;
+      font-weight: 600;
+    }
+
+    .size-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .size-btn {
+      padding: 12px;
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .size-btn.active {
+      background: #3b82f6;
+      color: white;
+      border-color: #3b82f6;
+    }
+
+    .size-btn:hover {
+      border-color: #3b82f6;
+    }
+
+    .label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .download-btn {
+      display: block;
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #3b82f6, #06b6d4);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      margin-bottom: 20px;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border-left: 4px solid #3b82f6;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .info-box h3 {
+      color: #1e40af;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .info-box ul {
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-left: 20px;
+    }
+
+    .info-box li {
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 640px) {
+      .size-options {
+        grid-template-columns: 1fr;
+      }
+
+      .container {
+        padding: 20px;
+      }
+    }
+
+    .instruction {
+      background: #10b981;
+      color: white;
+      padding: 15px 20px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔗 QR Code Generator</h1>
+    <p class="subtitle">301A TECH LTD Website QR Code</p>
+
+    <div class="instruction">
+      ✅ <strong>Right-click</strong> on the QR code below and select <strong>"Save image as..."</strong> to download
+    </div>
+
+    <div class="label">Select QR Code Size:</div>
+    <div class="size-options">
+      <button class="size-btn" onclick="changeSize(300)">Small<br>(300px)</button>
+      <button class="size-btn active" onclick="changeSize(500)">Medium<br>(500px)</button>
+      <button class="size-btn" onclick="changeSize(1000)">Large<br>(1000px)</button>
+    </div>
+
+    <div class="qr-container">
+      <div id="qrcode">
+        <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https://301atech.com&color=0f172a&bgcolor=ffffff" alt="QR Code for 301atech.com">
+      </div>
+      <div class="url-display">https://301atech.com</div>
+    </div>
+
+    <a id="downloadLink" href="https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&data=https://301atech.com&color=0f172a&bgcolor=ffffff&download=1" download="301atech-qr-code.png" class="download-btn">
+      ⬇️ Download QR Code (Click Here)
+    </a>
+
+    <div class="info-box">
+      <h3>📌 Quick Instructions:</h3>
+      <ul>
+        <li><strong>Option 1:</strong> Click the blue "Download QR Code" button above</li>
+        <li><strong>Option 2:</strong> Right-click the QR code → "Save image as..."</li>
+        <li><strong>Recommended:</strong> Use "Large (1000px)" for printing on business cards</li>
+        <li><strong>Test:</strong> Scan the QR code with your phone to verify it works</li>
+      </ul>
+    </div>
+
+    <div class="info-box">
+      <h3>🎯 How to Use on Business Cards:</h3>
+      <ul>
+        <li>Download the <strong>Large size (1000px)</strong></li>
+        <li>Place it on the back corner of your business card</li>
+        <li>Make sure it's at least <strong>1 inch x 1 inch</strong> in size</li>
+        <li>Leave white space around it (at least 0.5 inch)</li>
+        <li>Print on high-quality cardstock (300-350 GSM)</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    function changeSize(size) {
+      // Update button states
+      document.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // Update QR code image
+      const qrImage = document.getElementById('qrImage');
+      qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=https://301atech.com&color=0f172a&bgcolor=ffffff`;
+
+      // Update download link
+      const downloadLink = document.getElementById('downloadLink');
+      downloadLink.href = `https://api.qrserver.com/v1/create-qr-code/?size=${size}x${size}&data=https://301atech.com&color=0f172a&bgcolor=ffffff`;
+    }
+  </script>
+</body>
+</html>
