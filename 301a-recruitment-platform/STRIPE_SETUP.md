@@ -21,8 +21,8 @@ Add these to your `.env.local` file:
 
 ```env
 # Stripe Configuration
-STRIPE_SECRET_KEY=sk_test_your_actual_secret_key_here
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_your_actual_publishable_key_here
+STRIPE_SECRET_KEY=STRIPE_SECRET_KEY_PLACEHOLDER
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=STRIPE_PUBLISHABLE_KEY_PLACEHOLDER
 NEXT_PUBLIC_BASE_URL=http://localhost:3001
 ```
 
@@ -41,7 +41,7 @@ stripe listen --forward-to localhost:3001/api/stripe-webhook
 
 This will give you a webhook secret (starts with `whsec_`). Add it to `.env.local`:
 ```env
-STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret_here
+STRIPE_WEBHOOK_SECRET=STRIPE_WEBHOOK_SECRET_PLACEHOLDER
 ```
 
 #### Production Setup

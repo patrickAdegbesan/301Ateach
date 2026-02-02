@@ -5,8 +5,8 @@ Your recruitment platform now uses **Paystack** for processing boost payments. P
 
 ## ✅ API Keys Already Configured
 Your live Paystack keys are already in `.env.local`:
-- Public Key: `pk_live_YOUR_PAYSTACK_PUBLIC_KEY`
-- Secret Key: `sk_live_YOUR_PAYSTACK_SECRET_KEY`
+- Public Key: `PUBLIC_KEY_PLACEHOLDER`
+- Secret Key: `SECRET_KEY_PLACEHOLDER`
 
 ## Pricing Structure
 - **Basic**: $1.00 USD (3 days)
